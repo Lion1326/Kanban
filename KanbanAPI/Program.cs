@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using KanbanAPI.App_Code;
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -43,6 +44,8 @@ builder.Services.AddAuthentication(options =>
         };
     });
 
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
