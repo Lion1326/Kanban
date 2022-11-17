@@ -7,6 +7,7 @@ using System.Diagnostics.Metrics;
 
 public class KanbanDBContext : DbContext
 {
+
     public KanbanDBContext(DbContextOptions options) : base(options)
     {
 
@@ -22,9 +23,12 @@ public class KanbanDBContext : DbContext
         // modelBuilder.Entity<Event>().HasMany(r => r.CreatorID).WithOne().HasForeignKey(p => p.TaskRequestID).IsRequired(false);
         //modelBuilder.Entity<Event>().HasOne(x => x.Creator).WithMany().HasForeignKey(x => x.CreatorID);
         //modelBuilder.Entity<Event>().HasMany(x => x.Fields).WithOne().HasForeignKey(x => x.EventID);
+
+
         base.OnModelCreating(modelBuilder);
     }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Issues> Issues { get; set; }
 
 }
