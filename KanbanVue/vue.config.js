@@ -5,7 +5,7 @@ const baseFolder =
     process.env.APPDATA !== undefined && process.env.APPDATA !== ''
         ? `${process.env.APPDATA}/ASP.NET/https`
         : `${process.env.HOME}/.aspnet/https`;
-
+console.log(baseFolder);
 const certificateArg = process.argv.map(arg => arg.match(/--name=(?<value>.+)/i)).filter(Boolean)[0];
 const certificateName = certificateArg ? certificateArg.groups.value : "KanbanVue";
 
@@ -23,11 +23,7 @@ module.exports = {
             key: fs.readFileSync(keyFilePath),
             cert: fs.readFileSync(certFilePath),
         },
-        proxy: {
-            '^/weatherforecast': {
-                target: 'https://localhost:5001/'
-            }
-        },
+        proxy: 'https://localhost:5001/',
         port: 5002
     }
 }

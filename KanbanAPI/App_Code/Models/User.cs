@@ -1,5 +1,10 @@
-﻿namespace KanbanAPI.App_Code.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace KanbanAPI.App_Code.Models
 {
+
+    [Table("Users")]
     public class User
     {
         public int ID { get; set; }

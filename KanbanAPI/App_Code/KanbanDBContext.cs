@@ -29,6 +29,7 @@ public class KanbanDBContext : DbContext
     }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Token> Tokens { get; set; }
     public virtual DbSet<Issues> Issues { get; set; }
 
 }
