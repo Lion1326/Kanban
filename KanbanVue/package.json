@@ -8,12 +8,13 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "rxjs": "^6.4.0",
     "core-js": "^3.8.3",
     "jest": "^29.3.1",
     "jest-editor-support": "^30.2.1",
+    "rxjs": "^6.4.0",
     "vue": "^3.2.13",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vue3-datepicker": "^0.3.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
