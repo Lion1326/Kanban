@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using KanbanAPI.App_Code;
 using KanbanAPI.App_Code.Models;
 using System.Linq;
 using System.Collections.Generic;
@@ -7,83 +8,74 @@ using System.Threading.Tasks;
 using System.Data;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using Microsoft.AspNetCore.Authentication.OAuth;
+using System.Text;
+
 
 namespace KanbanAPI.Controllers
 {
     public class IssuesController : Controller
     {
-        private readonly ILogger<IssuesController> _logger;
-        IssuesRepository _context;
-        
-        public IssuesController(ILogger<IssuesController> logger, IssuesRepository context)
+        private IIssueRepository issueRepository;
+        public IssuesController(IIssueRepository issueRepository)
         {
-            _logger = logger;
-            _context = context;
+            this.issueRepository = issueRepository;
         }
-        // создание
-        public IActionResult Index()
+        public class IssueRequest
         {
-            return View(_context.Issues.ToList());
+            public int? Id { get; set; }
+            public string Name { get; set; }
+            public int CreatorID { get; set; }
+            public DateTime CreationDate { get; set; }
+            public int WorkerID { get; set; }
+            public DateTime StartDate { get; set; }
+            public DateTime FinishDate { get; set; }
+            public int StatusID { get; set; }
+            public string Description { get; set; }
         }
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost(Name = "create")]
-        public IActionResult Create(KanbanAPI.App_Code.Models.Issues issues)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Issues.Add(issues);
-                _context.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                return View(issues);
-            }
-        }
-        // редактирование
-        public async Task<IActionResult> Edit(int id)
-        {
 
-            KanbanAPI.App_Code.Models.Issues issues = await _context.Issues.FindAsync(id);
-            if (issues != null)
-                return View(issues);
-
-            return RedirectToAction("Create");
-        }
-        [HttpPost(Name = "edit")]
-        public async Task<IActionResult> Edit(KanbanAPI.App_Code.Models.Issues issues)
+        [HttpPost("issue/create")]
+        public async Task<ActionResult> AddIssue([FromBody] IssueRequest request)
         {
-            _context.Issues.Update(issues);
-            await _context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        // удаление
-        [HttpDelete(Name = "delete")]
-        public async Task<IActionResult> Delete(int id)
-        {
+            var getIssue = await issueRepository.GetIssueByID(request.Id);
 
-            KanbanAPI.App_Code.Models.Issues issues = await _context.Issues.FindAsync(id);
-            if (_context.Issues.Where(p => p.ID == id).Count() > 0)
+            if (getIssue == null)
             {
-                return BadRequest("Issue working on a task");
-            }
-
-            else
-            {
-                if (issues != null)
+                Issues issues = new()
                 {
-                    _context.Issues.Remove(issues);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction("Index");
-                }
+                    Name = request.Name,
+                    CreatorID = request.CreatorID,
+                    CreationDate = request.CreationDate,
+                    WorkerID = request.WorkerID,
+                    StartDate = request.StartDate,
+                    FinishDate = request.FinishDate,
+                    StatusID = request.StatusID,
+                    Description = request.Description,
+                };
+
+                issueRepository.AddPart(issues);
+            }
+            else
+            {
+                getIssue.Name = request.Name;
+                getIssue.CreatorID = request.CreatorID;
+                getIssue.CreationDate = request.CreationDate;
+                getIssue.WorkerID = request.WorkerID;
+                getIssue.StartDate = request.StartDate;
+                getIssue.FinishDate = request.FinishDate;
+                getIssue.StatusID = request.StatusID;
+                getIssue.Description = request.Description;
+
+                issueRepository.UppdatePart(getIssue);
             }
 
-            return NotFound();
+            await issueRepository.SaveChangesAsync();
+            return Ok();
         }
-
-        
-    }
+     }
 }
