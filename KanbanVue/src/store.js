@@ -195,5 +195,19 @@ export const store = reactive({
                 then(postRevokeAction).catch(postRevokeAction);
         else
             postRevokeAction();
+    },
+    addIssue(data){
+        return fetch('issue/create',{
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json; charset=utf-8'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(function (response) {
+            console.log(response);
+            console.log(new Date());
+        });
+
     }
 })

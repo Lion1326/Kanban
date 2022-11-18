@@ -8,7 +8,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th>Date</th>
+                        <th>Name</th>
                         <th>Temp. (C)</th>
                         <th>Temp. (F)</th>
                         <th>Summary</th>
@@ -58,7 +58,7 @@
                         this.loading = false;
                         return;
                     });
-            }
+            },
         },
     });
 </script>
