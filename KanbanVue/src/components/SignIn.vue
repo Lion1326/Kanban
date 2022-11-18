@@ -6,6 +6,7 @@
             <input type="text" placeholder="Password" v-model="signInRequest.password" />
         </div>
         <div>
+            <router-link to="/Issue">Add Issue</router-link>
             <router-link to="/SignUp">SignUp</router-link>
             <input type="button" value="Sign in" v-on:click="onSignInClick"/>
         </div>
