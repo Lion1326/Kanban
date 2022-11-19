@@ -155,4 +155,16 @@ export default {
 
     background-color: #83dcff;
 }
+
+.data-table {
+    background: #b5c2c4;
+    border-left: 1px solid #ccc;
+    border-collapse: separate;
+    border-spacing: 1px;
+    empty-cells: show;
+}
+
+.header-table {
+    background: white;
+}
 </style>
