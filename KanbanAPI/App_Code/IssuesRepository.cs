@@ -12,6 +12,7 @@ namespace KanbanAPI.App_Code
         void DeletePart(Issues model);
         Task<Issues> GetIssueByID(int? id);
         Task SaveChangesAsync();
+        IQueryable<Issues> GetList();
     }
     public class IssueRepository : IIssueRepository
     {
@@ -42,6 +43,10 @@ namespace KanbanAPI.App_Code
         public virtual async Task SaveChangesAsync()
         {
             await _context.SaveChangesAsync();
+        }
+        public IQueryable<Issues> GetList()
+        {
+            return _dbSet;
         }
     }
 }

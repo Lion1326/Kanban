@@ -32,9 +32,9 @@ namespace KanbanAPI.Controllers
             public string Name { get; set; }
             public int CreatorID { get; set; }
             public DateTime CreationDate { get; set; }
-            public int WorkerID { get; set; }
-            public DateTime StartDate { get; set; }
-            public DateTime FinishDate { get; set; }
+            public int? WorkerID { get; set; }
+            public DateTime? StartDate { get; set; }
+            public DateTime? FinishDate { get; set; }
             public int StatusID { get; set; }
             public string Description { get; set; }
         }
@@ -51,9 +51,9 @@ namespace KanbanAPI.Controllers
                     Name = request.Name,
                     CreatorID = request.CreatorID,
                     CreationDate = request.CreationDate,
-                    WorkerID = request.WorkerID,
-                    StartDate = request.StartDate,
-                    FinishDate = request.FinishDate,
+                    WorkerID = request.WorkerID.Value,
+                    StartDate = request.StartDate.Value,
+                    FinishDate = request.FinishDate.Value,
                     StatusID = request.StatusID,
                     Description = request.Description,
                 };
@@ -65,9 +65,9 @@ namespace KanbanAPI.Controllers
                 getIssue.Name = request.Name;
                 getIssue.CreatorID = request.CreatorID;
                 getIssue.CreationDate = request.CreationDate;
-                getIssue.WorkerID = request.WorkerID;
-                getIssue.StartDate = request.StartDate;
-                getIssue.FinishDate = request.FinishDate;
+                getIssue.WorkerID = request.WorkerID.Value;
+                getIssue.StartDate = request.StartDate.Value;
+                getIssue.FinishDate = request.FinishDate.Value;
                 getIssue.StatusID = request.StatusID;
                 getIssue.Description = request.Description;
 
@@ -76,6 +76,25 @@ namespace KanbanAPI.Controllers
 
             await issueRepository.SaveChangesAsync();
             return Ok();
+        }
+
+        [HttpDelete("issue/delete")]
+        public async Task<ActionResult> DeleteIssue([FromBody] IssueRequest request)
+        {
+            var getIssue = await issueRepository.GetIssueByID(request.Id);
+
+            issueRepository.DeletePart(getIssue);
+
+            await issueRepository.SaveChangesAsync();
+            return Ok();
+        }
+
+        [HttpPost("list")]
+        public IActionResult GetListIssues()
+        {
+            List<Issues> issues = issueRepository.GetList().ToList();
+
+            return Json(issues);
         }
      }
 }

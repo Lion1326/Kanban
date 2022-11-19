@@ -38,16 +38,16 @@ export default defineComponent({
             loading: false,
             post: null,
             issueRequest: {
-                id: 1,
-                name: 'name',
+                id: 0,
+                name: null,
                 creatorID: 1,
                 creationDate: new Date(),
-                workerID: 1,
+                workerID: null,
                 startDate: new Date(),
                 finishDate: new Date(),
                 statusID: 1,
-                description: 'dis',
-            }
+                description: null,
+            },
         };
     },
     created() {
@@ -64,5 +64,9 @@ export default defineComponent({
             });
         }
     },
+    mounted: function (){
+        if(store.issue != null)
+        this.issueRequest = store.issue;
+        }
 });
 </script>
