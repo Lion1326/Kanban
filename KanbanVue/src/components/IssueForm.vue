@@ -32,7 +32,7 @@
 
 <script lang="js">
 import { defineComponent } from 'vue';
-import { store } from '../store'
+import { store } from '../store';
 
 export default defineComponent({
     data() {

@@ -4,6 +4,7 @@ import SignUp from './components/SignUp.vue'
 import Main from './components/Main.vue'
 import Issue from './components/IssueForm.vue'
 import IssueList from './components/ListIssue.vue'
+import IssueInfo from './components/IssueInfo.vue'
 import { store } from './store'
 
 const routes = [
@@ -12,6 +13,7 @@ const routes = [
     { path: '/Issue', name: 'Issue', component: Issue, meta: { authorize: false} },
     { path: '/Main', name: 'Main', component: Main, meta: { authorize: true } },
     { path: '/Issues', name: 'Issues', component: IssueList, meta: { authorize: false} },
+    { path: '/IssueInfo', name: 'IssueInfo', component: IssueInfo, meta: { authorize: false} },
     {
 
         path: '/',
