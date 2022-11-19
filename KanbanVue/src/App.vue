@@ -6,7 +6,7 @@
             style="float: left;margin-left: 1%;" />
         <input type="button" @click="onTasksClick" value="Tasks" class="button-signout"
             style="float: left;margin-left: 1%;" />
-        <input type="button" @click="onTasksClick" value="+" class="button-signout"
+        <input type="button" @click="onTaskClick" value="+" class="button-signout"
             style="float: left;margin-left: 1%;padding: 5px 10px;" />
         <input type="button" @click="onLogOutClick" value="Sign Out" class="button-signout"
             style="float: right;margin-right: 1%;" />
@@ -39,7 +39,10 @@ export default {
             this.$router.push("/Main");
         },
         onTasksClick() {
-            this.$router.push("/Task");
+            this.$router.push("/Issues");
+        },
+        onTaskClick() {
+            this.$router.push("/Issue");
         },
         onLogOutClick() {
             store.signOut();
