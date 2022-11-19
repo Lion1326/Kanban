@@ -1,21 +1,21 @@
 <template>
-    <div class="post">
-        <span>User name: </span>
-        <input type="text" placeholder="User name" v-model="signUpRequest.userName" />
-        <br />
-        <span>Password: </span>
-        <input type="text" placeholder="Password" v-model="signUpRequest.password" />
-        <br />
-        <span>Firtname: </span>
-        <input type="text" placeholder="Password" v-model="signUpRequest.firstName" />
-        <br />
-        <span>Lastname: </span>
-        <input type="text" placeholder="Password" v-model="signUpRequest.lastName" />
-        <br />
-        <span>Email: </span>
-        <input type="text" placeholder="Password" v-model="signUpRequest.email" />
-        <br />
-        <input type="button" value="Registration" v-on:click="onSignUpClick"/>
+    <div class="modal-mask" style="background-color: rgb(165, 230, 255);">
+        <div class="modal-wrapper">
+            <div class="modal-container">
+                <input type="text" class="field" placeholder="User name" v-model="signUpRequest.userName" />
+                <br />
+                <input type="text" class="field" placeholder="Password" v-model="signUpRequest.password" />
+                <br />
+                <input type="text" class="field" placeholder="Firstname" v-model="signUpRequest.firstName" />
+                <br />
+                <input type="text" class="field" placeholder="Lastname" v-model="signUpRequest.lastName" />
+                <br />
+                <input type="text" class="field" placeholder="Email" v-model="signUpRequest.email" />
+                <br />
+                <router-link class="link" to="/SignIn" style="margin-right: 5px;">Back</router-link>
+                <input type="button" class="button" value="Registration" v-on:click="onSignUpClick" />
+            </div>
+        </div>
     </div>
 </template>
 
@@ -46,9 +46,12 @@ export default defineComponent({
     methods: {
         onSignUpClick() {
             let vm = this;
-            store.signUp(vm.signUpRequest).then(()=>{
+            store.signUp(vm.signUpRequest).then(() => {
                 this.$router.push("/SignIn")
             });
+        },
+        onBackClick() {
+            this.$router.push("/SignIn");
         }
     },
 });

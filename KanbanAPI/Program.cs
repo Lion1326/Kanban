@@ -46,6 +46,7 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddScoped<ITaskTimeRepository, TaskTimeRepository>();
 builder.Services.AddScoped<IIssueRepository, IssueRepository>();
 
 builder.Services.AddControllers();
