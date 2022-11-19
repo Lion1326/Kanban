@@ -1,4 +1,5 @@
 <template>
+
     <div class="post">
         <span>Name: </span>
         <input type="text" placeholder="Name issue" v-model="issueRequest.name" />
@@ -26,6 +27,7 @@
         <br />
         <input type="button" value="Add Issue" v-on:click="onIssueClick"/>
     </div>
+    
 </template>
 
 <script lang="js">
