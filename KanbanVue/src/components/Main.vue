@@ -5,7 +5,16 @@
             <div class="kanban-column-context">
                 <div class="kanban-column-context-item drag-el" v-for="(item, key) in issuesOpen" v-bind:key="key"
                     draggable="true" @dragstart="startDrag($event, item)">
-                    {{ item.name }}
+                    <div style="overflow: hidden;">
+                        <span style="  float: left;width: 60%;text-align: left;"> {{ item.name }}</span>
+                        <span style="  float: right;width: 40%;text-align: right;"> {{ 123 }}</span>
+                    </div>
+                    <br>
+                    <br>
+                    <div style="overflow: hidden;">
+                        <span style="  float: left;"> {{ format_date(item.creationDate) }}</span>
+                        <span style="  float: right;"> {{ item.workerID }}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -14,7 +23,16 @@
             <div class="kanban-column-context">
                 <div class="kanban-column-context-item drag-el" v-for="(item, key) in issuesInProgress" v-bind:key="key"
                     draggable="true" @dragstart="startDrag($event, item)">
-                    {{ item.name }}
+                    <div style="overflow: hidden;">
+                        <span style="  float: left;width: 60%;text-align: left;"> {{ item.name }}</span>
+                        <span style="  float: right;width: 40%;text-align: right;"> {{ 123 }}</span>
+                    </div>
+                    <br>
+                    <br>
+                    <div style="overflow: hidden;">
+                        <span style="  float: left;"> {{ format_date(item.creationDate) }}</span>
+                        <span style="  float: right;"> {{ item.workerID }}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -23,7 +41,16 @@
             <div class="kanban-column-context">
                 <div class="kanban-column-context-item drag-el" v-for="(item, key) in issuesDone" v-bind:key="key"
                     draggable="true" @dragstart="startDrag($event, item)">
-                    {{ item.name }}
+                    <div style="overflow: hidden;">
+                        <span style="  float: left;width: 60%;text-align: left;"> {{ item.name }}</span>
+                        <span style="  float: right;width: 40%;text-align: right;"> {{ 123 }}</span>
+                    </div>
+                    <br>
+                    <br>
+                    <div style="overflow: hidden;">
+                        <span style="  float: left;"> {{ format_date(item.creationDate) }}</span>
+                        <span style="  float: right;"> {{ item.workerID }}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -33,6 +60,7 @@
 <script lang="js">
 import { defineComponent } from 'vue';
 import { store } from '../store'
+import moment from 'moment'
 
 export default defineComponent({
     name: 'SignIn',
@@ -67,17 +95,26 @@ export default defineComponent({
         //'$route': 'fetchData'
     },
     methods: {
+        format_date(value) {
+            if (value) {
+                return moment(String(value)).format('DD.MM.YYYY')
+            }
+        },
         startDrag(evt, item) {
             //evt.dataTransfer.dropEffect = 'move';
             //evt.dataTransfer.effectAllowed = 'move';
-            evt.dataTransfer.setData('itemID', item.name);
+            evt.dataTransfer.setData('itemID', item.id);
         },
         onDrop(evt, list) {
             const itemID = evt.dataTransfer.getData('itemID');
-            store.onChangeIssueStatus({ name: itemID, statusID: list });
+            store.changeIssueStatus({ id: itemID, statusID: list })
+                .then(function () {
+                    store.getListIssue();
+                });
         },
     },
     mounted() {
+        store.getListIssue();
     },
 });
 </script>
@@ -111,12 +148,13 @@ export default defineComponent({
     margin-top: 13px;
     border-radius: 3px;
     box-shadow: 3px 3px 3px #b9b9b9;
+    overflow: hidden;
+    display: block;
 }
 
 .drop-zone {}
 
 .drag-el {
     cursor: move;
-    text-decoration-skip-ink: auto;
 }
 </style>

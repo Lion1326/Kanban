@@ -1,0 +1,41 @@
+﻿CREATE DATABASE KanbanDB
+ GO
+USE KanbanDB
+ GO
+CREATE TABLE Users
+(
+ ID int primary key IDENTITY(1,1) not null,
+ UserName NVARCHAR(max) not null,
+ FirstName NVARCHAR(max) not null,
+ LastName NVARCHAR(max) not null,
+ Email NVARCHAR(max) not null,
+ Password NVARCHAR(max) not null
+ )
+GO
+CREATE TABLE Issues
+(
+ ID int primary key IDENTITY(1,1) not null,
+ Name NVARCHAR(max) not null,
+ CreatorID INT not null,
+ CreationDate DATETIME not null,
+ WorkerID INT null,
+ StartDate DATETIME null,
+ FinishDate DATETIME null,
+ StatusID INT not null,
+ Description NVARCHAR(max) null
+)
+GO
+CREATE TABLE TaskTimes
+(
+ ID int primary key IDENTITY(1,1) not null,
+ TaskID INT not null,
+ UserID INT not null,
+ TimeSpent INT not null,
+ Date DATETIME not null
+)
+GO
+Create table UserTokens(
+    TokenID uniqueidentifier not null,
+    UserID int not null,
+    Expires Datetime not null
+)

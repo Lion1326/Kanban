@@ -9,9 +9,9 @@ import { store } from './store'
 const routes = [
     { path: '/SignIn', name: 'SignIn', component: SignIn, meta: { authorize: false } },
     { path: '/SignUp', name: 'SignUp', component: SignUp, meta: { authorize: false } },
-    { path: '/Issue', name: 'Issue', component: Issue, meta: { authorize: false} },
+    { path: '/Issue', name: 'Issue', component: Issue, meta: { authorize: true} },
     { path: '/Main', name: 'Main', component: Main, meta: { authorize: true } },
-    { path: '/Issues', name: 'Issues', component: IssueList, meta: { authorize: false} },
+    { path: '/Issues', name: 'Issues', component: IssueList, meta: { authorize: true} },
     {
 
         path: '/',

@@ -77,14 +77,14 @@ namespace KanbanAPI.Controllers
                 string passHash = PasswordHandler.GetHashString(request.Password, "N_&*(_N&(*0nbn-8v654v956N&)*(_mnytugfu");
                 if (user == null || user.Password != passHash)
                 {
-                    Response.ContentType = "text/plain";
+                    Response.ContentType = "application/json";
                     return StatusCode(StatusCodes.Status401Unauthorized, "User not found or password is incorect");
                 }
 
             }
             catch (Exception ex)
             {
-                Response.ContentType = "text/plain";
+                Response.ContentType = "application/json";
                 return StatusCode(StatusCodes.Status401Unauthorized, ex.Message);
             }
 
@@ -157,12 +157,12 @@ namespace KanbanAPI.Controllers
             }
             catch (SecurityTokenException ex)
             {
-                Response.ContentType = "text/plain";
+                Response.ContentType = "application/json";
                 return StatusCode((int)StatusCodes.Status403Forbidden, ex.Message);
             }
             catch (Exception ex)
             {
-                Response.ContentType = "text/plain";
+                Response.ContentType = "application/json";
                 return BadRequest(ex.Message);
             }
         }
@@ -193,12 +193,12 @@ namespace KanbanAPI.Controllers
             }
             catch (SecurityTokenException ex)
             {
-                Response.ContentType = "text/plain";
+                Response.ContentType = "application/json";
                 return StatusCode((int)StatusCodes.Status403Forbidden, ex.Message);
             }
             catch (Exception ex)
             {
-                Response.ContentType = "text/plain";
+                Response.ContentType = "application/json";
                 return BadRequest(ex.Message);
             }
         }

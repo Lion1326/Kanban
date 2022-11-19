@@ -22,13 +22,14 @@ public class KanbanDBContext : DbContext
 
         // modelBuilder.Entity<Event>().HasMany(r => r.CreatorID).WithOne().HasForeignKey(p => p.TaskRequestID).IsRequired(false);
         //modelBuilder.Entity<Event>().HasOne(x => x.Creator).WithMany().HasForeignKey(x => x.CreatorID);
-        //modelBuilder.Entity<Event>().HasMany(x => x.Fields).WithOne().HasForeignKey(x => x.EventID);
-
+        modelBuilder.Entity<Issue>().HasMany(x => x.TaskTimes).WithOne().HasForeignKey(x => x.TaskID );
+        modelBuilder.Entity<Issue>().HasOne(x => x.Worker).WithMany().HasForeignKey(x => x.WorkerID);
+        modelBuilder.Entity<Issue>().HasOne(x => x.Creator).WithMany().HasForeignKey(x => x.CreatorID);
 
         base.OnModelCreating(modelBuilder);
     }
 
     public virtual DbSet<User> Users { get; set; }
     public virtual DbSet<Token> Tokens { get; set; }
-    public virtual DbSet<Issues> Issues { get; set; }
+    public virtual DbSet<Issue> Issues { get; set; }
 }

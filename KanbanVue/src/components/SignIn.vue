@@ -3,9 +3,11 @@
         <div class="modal-wrapper">
             <div class="modal-container">
                 <div>
-                    <input type="text" class="field" style="width:200px" placeholder="User name" v-model="signInRequest.userName" />
+                    <input type="text" class="field" style="width:200px" placeholder="User name"
+                        v-model="signInRequest.userName" />
                     <br />
-                    <input type="text" class="field" style="width:200px" placeholder="Password" v-model="signInRequest.password" />
+                    <input type="text" class="field" style="width:200px" placeholder="Password"
+                        v-model="signInRequest.password" />
                 </div>
                 <div>
                     <router-link class="link" to="/SignUp" style="margin-right: 5px;">SignUp</router-link>
@@ -44,7 +46,9 @@ export default defineComponent({
     methods: {
         onSignInClick() {
             let vm = this;
-            store.signIn(vm.signInRequest).then(() => {  this.$router.push("/Main"); });
+            store.signIn(vm.signInRequest)
+                .then(() => { this.$router.push("/Main"); });
+
         }
     },
 });

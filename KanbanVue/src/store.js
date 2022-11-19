@@ -22,7 +22,7 @@ import { reactive } from 'vue'
 
 function getAccessToken(resolve, reject) {
     let session = fromLocalStorage();
-    if (session) {
+    if (session == null) {
         alert('not');
         store.signOut();
         return;
@@ -46,7 +46,7 @@ function getAccessToken(resolve, reject) {
         body: JSON.stringify({ access_token: session.access_token, refresh_token: session.refresh_token })
     })
         .then(function (res) {
-            if (res.status === 200) {
+            if (res.status == 200) {
                 res.json().then(function (json) {
                     session = json;
                     localStorage.setItem("kanban_session", JSON.stringify(json));
@@ -74,7 +74,7 @@ function fromLocalStorage() {
 
 
 export const store = reactive({
-    issues: [{ name: "open 1", statusID: 1 }, { name: "open 2", statusID: 1 }, { name: "open 3", statusID: 1 }, { name: "InProgress 1", statusID: 2 }, { name: "InProgress 2", statusID: 2 }, { name: "InProgress 3", statusID: 2 }, { name: "Done 1", statusID: 3 }, { name: "Done 2", statusID: 3 }, { name: "Done 3", statusID: 3 }],
+    issues: [],
     checkOnAuthorization() {
         let session = fromLocalStorage();
         if (!session) {
@@ -96,14 +96,6 @@ export const store = reactive({
         return true;
     },
     isAuthenticated: false,
-    onChangeIssueStatus(item){
-        for(let i = 0;i<this.issues.length;i++)
-        {
-            if(this.issues[i].name==item.name){
-                this.issues[i].statusID = item.statusID;
-            }
-        }
-    },
     defaultRequest(method, path, body) {
         let str = this;
         return new Promise(function (resolve, reject) {
@@ -165,12 +157,19 @@ export const store = reactive({
             },
             body: JSON.stringify(data)
         })
-            .then((response) => response.json())
-            .then(function (response) {
-                str.isAuthenticated = true;
-                localStorage.setItem("kanban_session", JSON.stringify(response));
+            .then(function (res) {
+                if (res.status == 200) {
+                   return res.json().then(function (json) {
+                        str.isAuthenticated = true;
+                        localStorage.setItem("kanban_session", JSON.stringify(json));
+                    });
+                } else {
+                    str.isAuthenticated = false;
+                    return res.text().then(function (error) {
+                        alert(error);
+                    });
+                }
             });
-
     },
     revoke(access_token, refresh_token) {
         return fetch('token', {
@@ -193,38 +192,23 @@ export const store = reactive({
         else
             postRevokeAction();
     },
-    addIssue(data){
-        return fetch('issue/create',{
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8'
-            },
-            body: JSON.stringify(data)
-        })
-        .then(function (response) {
-            console.log(response);
-            console.log(new Date());
-        });
+    addIssue(data) {
+        return this.defaultRequest("POST", "issues", data);
     },
-    editIssue(data){
+    editIssue(data) {
         this.issue = data;
     },
-    getListIssue(data){
-        return fetch('list',{
-            method: "POST",
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8'
-            },
-            body: JSON.stringify(data)
-        })
+    getListIssue(data) {
+        let str = this;
+        return this.defaultRequest("POST", "issues/list", data)
+            .then(function (response) {
+                str.issues = JSON.parse(response);
+            });
     },
-    deleteIssue(data){
-        return fetch('issue/delete',{
-            method: "DELETE",
-            headers: {
-                'Content-Type': 'application/json; charset=utf-8'
-            },
-            body: JSON.stringify(data)
-        })
+    deleteIssue(data) {
+        return this.defaultRequest("DELETE", "issues", data);
+    },
+    changeIssueStatus(data) {
+        return this.defaultRequest("POST", "issues/statuschange", data);
     }
 })

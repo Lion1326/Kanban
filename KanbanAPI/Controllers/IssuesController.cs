@@ -15,10 +15,13 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using System.Text;
-
+using Microsoft.AspNetCore.Authorization;
 
 namespace KanbanAPI.Controllers
 {
+
+    [Authorize]
+    [Route("{controller}")]
     public class IssuesController : Controller
     {
         private IIssueRepository issueRepository;
@@ -39,14 +42,14 @@ namespace KanbanAPI.Controllers
             public string Description { get; set; }
         }
 
-        [HttpPost("issue/create")]
-        public async Task<ActionResult> AddIssue([FromBody] IssueRequest request)
+        [HttpPost]
+        public async Task<ActionResult> PushIssue([FromBody] IssueRequest request)
         {
             var getIssue = await issueRepository.GetIssueByID(request.Id);
 
             if (getIssue == null)
             {
-                Issues issues = new()
+                Issue issues = new()
                 {
                     Name = request.Name,
                     CreatorID = request.CreatorID,
@@ -77,8 +80,22 @@ namespace KanbanAPI.Controllers
             await issueRepository.SaveChangesAsync();
             return Ok();
         }
+        public class IssueStatusChangeRequest
+        {
+            public int Id { get; set; }
+            public int StatusID { get; set; }
+        }
+        [HttpPost("statuschange")]
+        public async Task<ActionResult> StatusChange([FromBody] IssueStatusChangeRequest request)
+        {
+            var issue = await issueRepository.GetIssueByID(request.Id);
+            issue.StatusID = request.StatusID;
+            issueRepository.UppdatePart(issue);
+            await issueRepository.SaveChangesAsync();
+            return Json(issue);
+        }
 
-        [HttpDelete("issue/delete")]
+        [HttpDelete]
         public async Task<ActionResult> DeleteIssue([FromBody] IssueRequest request)
         {
             var getIssue = await issueRepository.GetIssueByID(request.Id);
@@ -92,9 +109,12 @@ namespace KanbanAPI.Controllers
         [HttpPost("list")]
         public IActionResult GetListIssues()
         {
-            List<Issues> issues = issueRepository.GetList().ToList();
+            List<Issue> issues = issueRepository.GetList()
+                .Include(x => x.Worker)
+                .Include(x => x.Creator)
+                .Include(x => x.TaskTimes).ToList();
 
             return Json(issues);
         }
-     }
+    }
 }

@@ -14,7 +14,7 @@
     <router-view></router-view>
 </template>
 <script>
-//import Datepicker from 'vue3-datepicker'
+
 import { store } from './store'
 export default {
     name: 'app',
@@ -23,9 +23,6 @@ export default {
             currentUser: null
         };
     },
-    // components: {
-    //     Datepicker
-    // },
     computed: {
         isAuthenticated() {
             return store.isAuthenticated;

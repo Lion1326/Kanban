@@ -7,36 +7,36 @@ namespace KanbanAPI.App_Code
 {
     public interface IIssueRepository
     {
-        void AddPart(Issues model);
-        void UppdatePart(Issues model);
-        void DeletePart(Issues model);
-        Task<Issues> GetIssueByID(int? id);
+        void AddPart(Issue model);
+        void UppdatePart(Issue model);
+        void DeletePart(Issue model);
+        Task<Issue> GetIssueByID(int? id);
         Task SaveChangesAsync();
-        IQueryable<Issues> GetList();
+        IQueryable<Issue> GetList();
     }
     public class IssueRepository : IIssueRepository
     {
         internal KanbanDBContext _context;
-        internal DbSet<Issues> _dbSet;
+        internal DbSet<Issue> _dbSet;
         public IssueRepository(KanbanDBContext context)
         {
             _context = context;
-            _dbSet = context.Set<Issues>();
+            _dbSet = context.Set<Issue>();
         }
-        public void AddPart(Issues model)
+        public void AddPart(Issue model)
         {
             _context.Entry(model).State = EntityState.Added;
         }
 
-        public void UppdatePart(Issues model)
+        public void UppdatePart(Issue model)
         {
             _context.Entry(model).State = EntityState.Modified;
         }
-        public void DeletePart(Issues model)
+        public void DeletePart(Issue model)
         {
             _context.Entry(model).State = EntityState.Deleted;
         }
-        public async Task<Issues> GetIssueByID(int? id)
+        public async Task<Issue> GetIssueByID(int? id)
         {
             return await _dbSet.FirstOrDefaultAsync(x => x.ID == id); 
         }
@@ -44,7 +44,7 @@ namespace KanbanAPI.App_Code
         {
             await _context.SaveChangesAsync();
         }
-        public IQueryable<Issues> GetList()
+        public IQueryable<Issue> GetList()
         {
             return _dbSet;
         }
