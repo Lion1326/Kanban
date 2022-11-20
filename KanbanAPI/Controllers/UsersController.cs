@@ -24,7 +24,7 @@ namespace KanbanAPI.Controllers
             this.userRepository = userRepository;
         }
 
-
+        //получение списка юзеров
         [HttpGet]
         public async Task<IActionResult> Get()
         {

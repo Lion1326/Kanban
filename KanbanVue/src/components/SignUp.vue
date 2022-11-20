@@ -44,12 +44,14 @@ export default defineComponent({
 
     },
     methods: {
+        //Обращение к API для регистрации юзера
         onSignUpClick() {
             let vm = this;
             store.signUp(vm.signUpRequest).then(() => {
                 this.$router.push("/SignIn")
             });
         },
+        //Вернуться на главную страницу
         onBackClick() {
             this.$router.push("/SignIn");
         }

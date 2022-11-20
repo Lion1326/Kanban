@@ -58,6 +58,7 @@ export default {
         //'$route': 'fetchData'
     },
     methods: {
+        //Обращение к APi для добавление списанного времени
         onPushTime() {
             let vm = this;
             store.pushTaskTime(vm.taskTime).then(function (response) {
@@ -68,6 +69,7 @@ export default {
                 store.getListIssue();
             });
         },
+        //Скрытие панели
         onCloseTimePanel() {
             store.showTimeSpentPanel = false;
         }

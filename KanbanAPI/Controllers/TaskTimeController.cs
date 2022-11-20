@@ -27,7 +27,7 @@ namespace KanbanAPI.Controllers
             this.userRepository = userRepository;
         }
 
-
+        //Добавление и изменение списанного времени
         [HttpPost]
         public async Task<IActionResult> Push([FromBody] TaskTime request)
         {
@@ -41,6 +41,7 @@ namespace KanbanAPI.Controllers
             return Json(request);
         }
 
+        //Удаление списанного времени
         [HttpDelete]
         public async Task<IActionResult> Delete([FromBody] TaskTime request)
         {

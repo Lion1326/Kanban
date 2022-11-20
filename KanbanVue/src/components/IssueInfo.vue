@@ -77,10 +77,12 @@ export default {
         //'$route': 'fetchData'
     },
     methods: {
+        //Обращение к APi для добавления Issue и перехода на главную страницу
         onIssueClick(issue) {
             store.editIssue(issue);
             this.$router.push("/Issue");
         },
+        //Обращение к APi для удаление Issue
         onDeleteClick(issue) {
             let vm = this;
             store.deleteIssue(issue)
@@ -89,15 +91,18 @@ export default {
                 });
 
         },
+        //Метод для формирования Date
         formatdate(value) {
             if (value) {
                 return moment(String(value)).format('DD.MM.YYYY')
             }
         },
+        //Отображение панели
         onAddTime() {
             store.showTimeSpentPanel = true;
         }
     },
+    //Метод выполняющейся при загрузке страницы
     mounted: function () {
         this.issueInfo = store.issue;
     }

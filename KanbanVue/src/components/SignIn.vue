@@ -44,6 +44,7 @@ export default defineComponent({
         //'$route': 'fetchData'
     },
     methods: {
+        //Обращение к APi для проверки введённых двнных при входе
         onSignInClick() {
             let vm = this;
             store.signIn(vm.signInRequest)

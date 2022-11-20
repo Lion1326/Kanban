@@ -34,6 +34,7 @@ namespace KanbanAPI.Controllers
             public string Password { get; set; }
         }
 
+        //Создание нового пользователя
         [HttpPost("token/SignUp")]
         public async Task<IActionResult> SignUp([FromBody] SignUpRequest request)
         {
@@ -67,6 +68,8 @@ namespace KanbanAPI.Controllers
             public string refresh_token { get; set; }
             public DateTime refresh_expires { get; set; }
         }
+
+        //Предупреждение если нет юзера либо не правильно введены логин или пороль, создание токена при авторизации
         [HttpPost("Token")]
         public async Task<ActionResult> Post([FromBody] SignInRequest request)
         {
@@ -105,6 +108,8 @@ namespace KanbanAPI.Controllers
             public string access_token { get; set; }
             public string refresh_token { get; set; }
         }
+
+        //Предупреждение об окончании времени жизни токена, обновление токена
         [HttpPut("Token")]
         public async Task<ActionResult> Put([FromBody] PutRequest request)
         {
@@ -171,6 +176,8 @@ namespace KanbanAPI.Controllers
             public string access_token { get; set; }
             public string refresh_token { get; set; }
         }
+
+        //удаление токени
         [HttpDelete("Token")]
         public async Task<ActionResult> Delete([FromBody] DeleteRequest request)
         {
@@ -202,6 +209,8 @@ namespace KanbanAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        //Длина токена
         private Guid GenerateRefreshToken()
         {
             using (var provider = new RNGCryptoServiceProvider())
@@ -212,6 +221,8 @@ namespace KanbanAPI.Controllers
                 return new Guid(bytes);
             }
         }
+
+        //Создание параментров для жизни токена
         private TokenResponse GenerateTokenResponse(User user, Guid refresh_token)
         {
             var now = DateTime.UtcNow;

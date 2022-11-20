@@ -135,6 +135,7 @@ export default defineComponent({
 
     },
     methods: {
+        //Получение списка Issue
         onIssueClick() {
             let vm = this;
             store.addIssue(vm.issueRequest)
@@ -143,14 +144,17 @@ export default defineComponent({
                     store.getListIssue();
                 });
         },
+        //Отображение панели
         onAddTime() {
             store.showTimeSpentPanel = true;
         },
+        //Метод для формирования Date
         formatdate(value) {
             if (value) {
                 return moment(value).format('YYYY-MM-DD')
             }
         },
+        //Обращение к APi для удаления списанного времени
         onDeleteTime(item) {
             store.deleteTaskTime(item)
             .then(function () {
@@ -164,6 +168,7 @@ export default defineComponent({
                 }
             });
         },
+        //Обращение к APi для удаления выбранной Issue
         onDeleteClick() {
             let vm = this;
             store.deleteIssue(vm.issueRequest)
@@ -172,10 +177,12 @@ export default defineComponent({
                     store.getListIssue();
                 });
         },
+        //Скрытие панели
         onCloseIssuePanel() {
             store.hideIssue();
         }
     },
+    //Метод выполняющейся при загрузке страницы
     mounted: function () {
         store.getListUsers();
         console.log(store.currentUser());

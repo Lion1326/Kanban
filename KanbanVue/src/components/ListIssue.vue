@@ -52,18 +52,22 @@ export default defineComponent({
         //'$route': 'fetchData'
     },
     methods: {
+        //Отображение выбранной Issue
         onIssueClick(item) {
             store.editIssue(item);
         },
+        //Метод для формировоания Date
         formatdate(value) {
             if (value) {
                 return moment(String(value)).format('DD.MM.YYYY')
             }
         },
+        //Обращение к APi для получения списка Issue
         loadData: function () {
             store.getListIssue();
         }
     },
+    //Метод выполняющейся при загрузке страницы
     mounted: function () {
         let vm = this;
             console.log(store.statuses);

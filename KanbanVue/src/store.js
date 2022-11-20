@@ -204,20 +204,25 @@ export const store = reactive({
         else
             postRevokeAction();
     },
+    //Обращение к API, для добавление Issue
     addIssue(data) {
         return this.defaultRequest("POST", "issues", data);
     },
+    //Отоброжение IssuePanel
     onShowIssuePanel(){
         this.showIssuePanel = true;
     },
+    //Перенос данных про Issue с однеой страницы на другую
     editIssue(data) {
         this.issue = data;
         this.showIssuePanel = true;
     },
+    //Обнуление переменной issue и скрытие панели
     hideIssue() {
         this.issue = null;
         this.showIssuePanel = false;
     },
+    //Обращение к API с получение списка всех Issue
     getListIssue(data) {
         let str = this;
         return this.defaultRequest("POST", "issues/list", data)
@@ -234,12 +239,16 @@ export const store = reactive({
                 console.log(response);
             });
     },
+
+    //Обращение к API для удаление Issue
     deleteIssue(data) {
         return this.defaultRequest("DELETE", "issues", data);
     },
+    //Обращение к API для изменения статса Issue
     changeIssueStatus(data) {
         return this.defaultRequest("POST", "issues/statuschange", data);
     },
+    //Обращение к API для получения списка юзеров
     getListUsers() {
         let str = this;
         return this.defaultRequest("GET", "users")
@@ -247,9 +256,11 @@ export const store = reactive({
                 str.users = JSON.parse(response);
             });
     },
+    //Обращение к APi для добавления списанного времени
     pushTaskTime(data){
         return this.defaultRequest("POST", "TaskTime", data);
     },
+    //Обращение к APi для удаления списанного времени 
     deleteTaskTime(data){
         return this.defaultRequest("DELETE", "TaskTime",data);
     },

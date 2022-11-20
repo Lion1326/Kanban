@@ -101,6 +101,7 @@ export default defineComponent({
         //'$route': 'fetchData'
     },
     methods: {
+        //Подсчёт списанного времени
         calcSpentTime(item) {
             console.log(item);
             let result = 0;
@@ -112,9 +113,11 @@ export default defineComponent({
             }
             return  result;
         },
+        //Отображение выбранной Issue
         onIssueClick(item) {
             store.editIssue(item);
         },
+        //Метод для формировании Date
         format_date(value) {
             if (value) {
                 return moment(String(value)).format('DD.MM.YYYY')

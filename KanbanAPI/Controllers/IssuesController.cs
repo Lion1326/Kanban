@@ -41,7 +41,7 @@ namespace KanbanAPI.Controllers
             public int StatusID { get; set; }
             public string Description { get; set; }
         }
-
+        //Добавление и редактирование Issue
         [HttpPost]
         public async Task<ActionResult> PushIssue([FromBody] Issue request)
         {
@@ -85,6 +85,7 @@ namespace KanbanAPI.Controllers
             public int Id { get; set; }
             public int StatusID { get; set; }
         }
+        //Изменение статуса
         [HttpPost("statuschange")]
         public async Task<ActionResult> StatusChange([FromBody] IssueStatusChangeRequest request)
         {
@@ -95,6 +96,7 @@ namespace KanbanAPI.Controllers
             return Json(issue);
         }
 
+        //Удаление Issue
         [HttpDelete]
         public async Task<ActionResult> DeleteIssue([FromBody] IssueRequest request)
         {
@@ -105,7 +107,7 @@ namespace KanbanAPI.Controllers
             await issueRepository.SaveChangesAsync();
             return Ok();
         }
-
+        //Получение списка всех Issue из БД, добавляя к ним таблицы User и TaskTime
         [HttpPost("list")]
         public IActionResult GetListIssues()
         {
