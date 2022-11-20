@@ -17,30 +17,34 @@ namespace KanbanAPI.Controllers
     public class TaskTimeController : Controller
     {
         private ITaskTimeRepository taskTimeRepository;
+        private IUserRepository userRepository;
         public TaskTimeController(
-            ITaskTimeRepository taskTimeRepository
+            ITaskTimeRepository taskTimeRepository,
+            IUserRepository userRepository
             )
         {
             this.taskTimeRepository = taskTimeRepository;
+            this.userRepository = userRepository;
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Push([FromBody] TaskTime request)
         {
-            if (request.ID > 0)
+            if (request.ID == 0)
                 taskTimeRepository.AddPart(request);
             else
                 taskTimeRepository.UpdatePart(request);
 
             await taskTimeRepository.SaveChangesAsync();
+            request.User = userRepository.GetByID(request.UserID);
             return Json(request);
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromQuery] int id)
+        [HttpDelete]
+        public async Task<IActionResult> Delete([FromBody] TaskTime request)
         {
-            TaskTime model = taskTimeRepository.GetByID(id);
+            TaskTime model = taskTimeRepository.GetByID(request.ID);
             if (model != null)
             {
                 taskTimeRepository.DeletePart(model);

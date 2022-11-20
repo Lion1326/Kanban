@@ -14,5 +14,6 @@ namespace KanbanAPI.App_Code.Models
         public int UserID { get; set; }
         public int TimeSpent { get; set; }
         public DateTime Date  { get; set; }
+        public User User { get; set; }
     }
 }

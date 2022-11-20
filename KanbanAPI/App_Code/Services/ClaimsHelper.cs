@@ -84,7 +84,7 @@ using KanbanAPI.App_Code.Models;
                 if (claim.Type == System.Security.Claims.ClaimTypes.NameIdentifier) iuser.ID = Convert.ToInt32(claim.Value);
                 if (claim.Type == System.Security.Claims.ClaimTypes.Email) iuser.Email = claim.Value;
                 if (claim.Type == System.Security.Claims.ClaimTypes.GivenName) iuser.FirstName = claim.Value;
-                if (claim.Type == System.Security.Claims.ClaimTypes.Surname) iuser.FirstName = claim.Value;
+                if (claim.Type == System.Security.Claims.ClaimTypes.Surname) iuser.LastName = claim.Value;
 
             }
             return iuser;

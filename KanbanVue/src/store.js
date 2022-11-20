@@ -72,9 +72,21 @@ function fromLocalStorage() {
         return JSON.parse(sessionStr);
 }
 
-
+function ApiUser(id, username, lastName, firstName) {
+    return {
+        username: username,
+        id: id,
+        lastName: lastName,
+        firstName: firstName
+    }
+}
 export const store = reactive({
+    issue: null,
     issues: [],
+    users: [],
+    statuses: [{ id: 1, name: 'Open' }, { id: 2, name: 'In Progress' }, { id: 3, name: 'Done' }],
+    showTimeSpentPanel: false,
+    showIssuePanel: false,
     checkOnAuthorization() {
         let session = fromLocalStorage();
         if (!session) {
@@ -159,7 +171,7 @@ export const store = reactive({
         })
             .then(function (res) {
                 if (res.status == 200) {
-                   return res.json().then(function (json) {
+                    return res.json().then(function (json) {
                         str.isAuthenticated = true;
                         localStorage.setItem("kanban_session", JSON.stringify(json));
                     });
@@ -195,14 +207,31 @@ export const store = reactive({
     addIssue(data) {
         return this.defaultRequest("POST", "issues", data);
     },
+    onShowIssuePanel(){
+        this.showIssuePanel = true;
+    },
     editIssue(data) {
         this.issue = data;
+        this.showIssuePanel = true;
+    },
+    hideIssue() {
+        this.issue = null;
+        this.showIssuePanel = false;
     },
     getListIssue(data) {
         let str = this;
         return this.defaultRequest("POST", "issues/list", data)
             .then(function (response) {
-                str.issues = JSON.parse(response);
+                response = JSON.parse(response);
+                response.forEach(element => {
+                    element.creationDate = new Date(element.creationDate);
+                    if (element.startDate)
+                        element.startDate = new Date(element.startDate);
+                    if (element.finishDate)
+                        element.finishDate = new Date(element.finishDate);
+                });
+                str.issues = response;
+                console.log(response);
             });
     },
     deleteIssue(data) {
@@ -210,5 +239,36 @@ export const store = reactive({
     },
     changeIssueStatus(data) {
         return this.defaultRequest("POST", "issues/statuschange", data);
+    },
+    getListUsers() {
+        let str = this;
+        return this.defaultRequest("GET", "users")
+            .then(function (response) {
+                str.users = JSON.parse(response);
+            });
+    },
+    pushTaskTime(data){
+        return this.defaultRequest("POST", "TaskTime", data);
+    },
+    deleteTaskTime(data){
+        return this.defaultRequest("DELETE", "TaskTime",data);
+    },
+    currentUser() {
+        let session = fromLocalStorage();
+        if (session != null) {
+            let base64Url = session.access_token.split('.')[1];
+            let base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            let strPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+
+            let jsonPayload = JSON.parse(strPayload);
+            return ApiUser(
+                jsonPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"],
+                jsonPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name"],
+                jsonPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname"],
+                jsonPayload["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname"]
+            );
+        } else return {};
     }
 })

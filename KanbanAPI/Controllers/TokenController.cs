@@ -234,7 +234,9 @@ namespace KanbanAPI.Controllers
             return new Claim[]
             {
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier,user.ID.ToString())
+                new Claim(ClaimTypes.NameIdentifier,user.ID.ToString()),
+                new Claim(ClaimTypes.GivenName,user.FirstName.ToString()),
+                new Claim(ClaimTypes.Surname,user.LastName.ToString())
             };
         }
         private string GenerateAccessToken(IEnumerable<Claim> claims, DateTime expiresDate)

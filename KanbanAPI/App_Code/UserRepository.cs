@@ -10,6 +10,7 @@ namespace KanbanAPI.App_Code
         User GetByID(int id);
         void AddPart(User model);
         Task<User> GetByUserNameAsync(string userName);
+        IQueryable<User> GetList();
         Task SaveChangesAsync();
     }
     public class UserRepository : IUserRepository
@@ -32,6 +33,10 @@ namespace KanbanAPI.App_Code
         public async Task<User> GetByUserNameAsync(string userName)
         {
             return await _dbSet.FirstOrDefaultAsync(x => x.UserName == userName);
+        }
+        public IQueryable<User> GetList()
+        {
+            return _dbSet;
         }
         public virtual async Task SaveChangesAsync()
         {

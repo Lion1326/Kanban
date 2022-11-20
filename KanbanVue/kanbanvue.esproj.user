@@ -2,12 +2,7 @@
 <Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>LaunchJsonDebugger</DebuggerFlavor>
-    <LaunchJsonTarget>{
-  "type": "edge",
-  "request": "launch",
-  "name": "localhost (Edge)",
-  "url": "https://localhost:5002",
-  "webRoot": "D:\\Work\\Kanban\\KanbanVue"
-}</LaunchJsonTarget>
+    <LaunchJsonTarget>
+    </LaunchJsonTarget>
   </PropertyGroup>
 </Project>

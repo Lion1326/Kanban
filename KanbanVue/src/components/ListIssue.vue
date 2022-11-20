@@ -1,7 +1,7 @@
 <template>
     <div>
         <table class="data-table">
-            <tr class="field">
+            <tr class="header-table">
                 <td>Name task</td>
                 <td>Worker</td>
                 <td>Start date</td>
@@ -9,26 +9,22 @@
                 <td>Status</td>
                 <td>Description</td>
             </tr>
-            <tr v-for="(item, key) in issueList" v-bind:key="key" class="header-table">
-                <td>{{item.name}}</td>
-                <td>{{item.workerID}}</td>
-                <td>{{formatdate(item.startDate)}}</td>
-                <td>{{formatdate(item.finishDate)}}</td>
-                <td>{{item.statusID}}</td>
-                <td>{{item.description}}</td>
-                <td>
-                    <input type="button" class="button" value="Edit" v-on:click="onIssueClick(item)"/>
-                    <input type="button" class="button" value="Delete" style="margin-left: 10px" v-on:click="onDeleteClick(item)"/>
-                </td>
+            <tr v-for="(item, key) in issueList" v-bind:key="key">
+                <td><a class="link" v-on:click="onIssueClick(item)">{{ item.name }}</a></td>
+                <td><span v-if="item.worker">{{ item.worker.lastName }} {{ item.worker.firstName }}</span></td>
+                <td>{{ formatdate(item.startDate) }}</td>
+                <td>{{ formatdate(item.finishDate) }}</td>
+                <td>{{ statuses[item.statusID-1].name }}</td>
+                <td>{{ item.description }}</td>
             </tr>
         </table>
     </div>
 </template>
 
 <script lang="js">
-    import { defineComponent } from 'vue';
-    import { store } from '../store';
-    import moment from 'moment';
+import { defineComponent } from 'vue';
+import { store } from '../store';
+import moment from 'moment';
 
 export default defineComponent({
     name: 'ListIssue',
@@ -41,6 +37,9 @@ export default defineComponent({
     computed: {
         issueList() {
             return store.issues;
+        },
+        statuses() {
+            return store.statuses;
         },
     },
     created() {
@@ -55,28 +54,20 @@ export default defineComponent({
     methods: {
         onIssueClick(item) {
             store.editIssue(item);
-            this.$router.push("/IssueInfo");
         },
-        onDeleteClick(item) {
-            let vm = this;
-            store.deleteIssue(item)
-                .then(function () {
-                    vm.loadData();
-                });
-                
-            },
-            formatdate(value){
-                if (value) {
-                    return moment(String(value)).format('DD.MM.YYYY')
-                }
-            },
-            loadData: function () {
-                store.getListIssue();
+        formatdate(value) {
+            if (value) {
+                return moment(String(value)).format('DD.MM.YYYY')
             }
         },
-        mounted: function (){
-            let vm = this;
-            vm.loadData();
+        loadData: function () {
+            store.getListIssue();
         }
-    });
+    },
+    mounted: function () {
+        let vm = this;
+            console.log(store.statuses);
+        vm.loadData();
+    }
+});
 </script>

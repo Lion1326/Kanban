@@ -25,6 +25,7 @@ public class KanbanDBContext : DbContext
         modelBuilder.Entity<Issue>().HasMany(x => x.TaskTimes).WithOne().HasForeignKey(x => x.TaskID );
         modelBuilder.Entity<Issue>().HasOne(x => x.Worker).WithMany().HasForeignKey(x => x.WorkerID);
         modelBuilder.Entity<Issue>().HasOne(x => x.Creator).WithMany().HasForeignKey(x => x.CreatorID);
+        modelBuilder.Entity<TaskTime>().HasOne(x => x.User).WithMany().HasForeignKey(x => x.UserID);
 
         base.OnModelCreating(modelBuilder);
     }

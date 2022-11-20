@@ -36,16 +36,16 @@ namespace KanbanAPI.Controllers
             public int CreatorID { get; set; }
             public DateTime CreationDate { get; set; }
             public int? WorkerID { get; set; }
-            public DateTime? StartDate { get; set; }
+            public DateTime? StartDate { get; set; } = null;
             public DateTime? FinishDate { get; set; }
             public int StatusID { get; set; }
             public string Description { get; set; }
         }
 
         [HttpPost]
-        public async Task<ActionResult> PushIssue([FromBody] IssueRequest request)
+        public async Task<ActionResult> PushIssue([FromBody] Issue request)
         {
-            var getIssue = await issueRepository.GetIssueByID(request.Id);
+            var getIssue = await issueRepository.GetIssueByID(request.ID);
 
             if (getIssue == null)
             {
@@ -54,9 +54,9 @@ namespace KanbanAPI.Controllers
                     Name = request.Name,
                     CreatorID = request.CreatorID,
                     CreationDate = request.CreationDate,
-                    WorkerID = request.WorkerID.Value,
-                    StartDate = request.StartDate.Value,
-                    FinishDate = request.FinishDate.Value,
+                    WorkerID = request.WorkerID,
+                    StartDate = request.StartDate,
+                    FinishDate = request.FinishDate,
                     StatusID = request.StatusID,
                     Description = request.Description,
                 };
@@ -68,9 +68,9 @@ namespace KanbanAPI.Controllers
                 getIssue.Name = request.Name;
                 getIssue.CreatorID = request.CreatorID;
                 getIssue.CreationDate = request.CreationDate;
-                getIssue.WorkerID = request.WorkerID.Value;
-                getIssue.StartDate = request.StartDate.Value;
-                getIssue.FinishDate = request.FinishDate.Value;
+                getIssue.WorkerID = request.WorkerID;
+                getIssue.StartDate = request.StartDate;
+                getIssue.FinishDate = request.FinishDate;
                 getIssue.StatusID = request.StatusID;
                 getIssue.Description = request.Description;
 
@@ -112,7 +112,9 @@ namespace KanbanAPI.Controllers
             List<Issue> issues = issueRepository.GetList()
                 .Include(x => x.Worker)
                 .Include(x => x.Creator)
-                .Include(x => x.TaskTimes).ToList();
+                .Include(x => x.TaskTimes)
+                .ThenInclude(x=>x.User)
+                .ToList();
 
             return Json(issues);
         }

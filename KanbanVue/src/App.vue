@@ -12,9 +12,26 @@
             style="float: right;margin-right: 1%;" />
     </div>
     <router-view></router-view>
+    <div class="modal-mask" style="background-color: rgba(165, 230, 255, .5);z-index: 999999;"
+        v-if="showTimeSpentPanel">
+        <div class="modal-wrapper">
+            <div class="modal-container">
+                <TimeSpent></TimeSpent>
+            </div>
+        </div>
+    </div>
+    <div class="modal-mask" style="background-color: rgba(165, 230, 255, .5);z-index: 999998;" v-if="showIssuePanel">
+        <div class="modal-wrapper">
+            <div class="modal-container">
+                <IssueForm></IssueForm>
+            </div>
+        </div>
+    </div>
 </template>
 <script>
 
+import TimeSpent from './components/TimeSpent.vue'
+import IssueForm from './components/IssueForm.vue'
 import { store } from './store'
 export default {
     name: 'app',
@@ -23,9 +40,19 @@ export default {
             currentUser: null
         };
     },
+    components: {
+        TimeSpent,
+        IssueForm
+    },
     computed: {
         isAuthenticated() {
             return store.isAuthenticated;
+        },
+        showTimeSpentPanel() {
+            return store.showTimeSpentPanel;
+        },
+        showIssuePanel() {
+            return store.showIssuePanel;
         }
     },
     created() {
@@ -39,7 +66,7 @@ export default {
             this.$router.push("/Issues");
         },
         onTaskClick() {
-            this.$router.push("/Issue");
+            store.onShowIssuePanel();
         },
         onLogOutClick() {
             store.signOut();
@@ -140,6 +167,7 @@ export default {
 .link {
     text-decoration: none;
     color: #83dcff;
+    cursor: pointer;
 }
 
 .link:hover {
@@ -157,14 +185,18 @@ export default {
 }
 
 .data-table {
-    background: #b5c2c4;
-    border-left: 1px solid #ccc;
-    border-collapse: separate;
     border-spacing: 1px;
     empty-cells: show;
+    border-collapse: collapse;
 }
+.data-table td{
+    padding: 4px 10px;
+    border: 1px solid #ccc;
+}
+.header-table {}
 
-.header-table {
-    background: white;
+.header-table td {
+    font-weight: bold;
+    background-color: #eee;
 }
 </style>

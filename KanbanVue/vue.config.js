@@ -17,6 +17,19 @@ const certFilePath = path.join(baseFolder, `${certificateName}.pem`);
 const keyFilePath = path.join(baseFolder, `${certificateName}.key`);
 
 module.exports = {
+    chainWebpack: config => {
+        config.module
+            .rule('vue')
+            .use('vue-loader')
+            .tap(options => {
+                options.compilerOptions = {
+                    ...options.compilerOptions,
+                    isCustomElement: tag => tag.startsWith('bdl-')
+                }
+                return options
+            })
+    },
+    runtimeCompiler: true,
     devServer: {
         https: {
             key: fs.readFileSync(keyFilePath),
