@@ -185,8 +185,6 @@ export default defineComponent({
     //Метод выполняющейся при загрузке страницы
     mounted: function () {
         store.getListUsers();
-        console.log(store.currentUser());
-        console.log(store.issue);
         if (store.issue != null)
             this.issueRequest = store.issue;
     }

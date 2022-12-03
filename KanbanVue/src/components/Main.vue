@@ -1,12 +1,19 @@
 <template>
+    <div>
+        <table style="margin: auto; border: 1px solid; border-top: white; border-spacing: 45px 10px; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+            <td>Open: {{openPrs}}%</td>
+            <td>In progress: {{inProgressPrs}}%</td>
+            <td>Done: {{donePrs}}%</td>
+        </table>
+    </div>
     <div class="kanban">
         <div class="kanban-column drop-zone" @drop="onDrop($event, 1)" @dragover.prevent @dragenter.prevent>
             <div class="kanban-column-title">Open</div>
             <div class="kanban-column-context">
-                <div class="kanban-column-context-item drag-el" v-for="(item, key) in issuesOpen" v-bind:key="key"
+                <div class="kanban-column-context-item drag-el" v-bind:style="format_date(item.finishDate) <= format_date(dateNow) ? 'background-color:#ff6b6b' : '' " v-for="(item, key) in issuesOpen" v-bind:key="key"
                     draggable="true" @dragstart="startDrag($event, item)" @click.stop="onIssueClick(item)">
                     <div style="overflow: hidden;">
-                        <span style="  float: left;width: 60%;text-align: left;"> {{ item.name }}</span>
+                        <span style="  float: left;width: 60%;text-align: left;"> #{{item.id}}  {{ item.name }}</span>
                         <span style="  float: right;width: 40%;text-align: right;"> {{ calcSpentTime(item) }}</span>
                     </div>
                     <br>
@@ -23,10 +30,10 @@
         <div class="kanban-column drop-zone" @drop="onDrop($event, 2)" @dragover.prevent @dragenter.prevent>
             <div class="kanban-column-title">In Progress</div>
             <div class="kanban-column-context">
-                <div class="kanban-column-context-item drag-el" v-for="(item, key) in issuesInProgress" v-bind:key="key"
+                <div class="kanban-column-context-item drag-el" v-bind:style="format_date(item.finishDate) <= format_date(dateNow) ? 'background-color:#ff6b6b' : '' " v-for="(item, key) in issuesInProgress" v-bind:key="key"
                     draggable="true" @dragstart="startDrag($event, item)" @click.stop="onIssueClick(item)">
                     <div style="overflow: hidden;">
-                        <span style="  float: left;width: 60%;text-align: left;"> {{ item.name }}</span>
+                        <span style="  float: left;width: 60%;text-align: left;"> #{{item.id}}  {{ item.name }}</span>
                         <span style="  float: right;width: 40%;text-align: right;"> {{ calcSpentTime(item) }}</span>
                     </div>
                     <br>
@@ -43,10 +50,10 @@
         <div class="kanban-column drop-zone" @drop="onDrop($event, 3)" @dragover.prevent @dragenter.prevent>
             <div class="kanban-column-title">Done</div>
             <div class="kanban-column-context">
-                <div class="kanban-column-context-item drag-el" v-for="(item, key) in issuesDone" v-bind:key="key"
+                <div class="kanban-column-context-item drag-el" v-bind:style="format_date(item.finishDate) <= format_date(dateNow) ? 'background-color:#ff6b6b' : '' " v-for="(item, key) in issuesDone" v-bind:key="key"
                     draggable="true" @dragstart="startDrag($event, item)" @click.stop="onIssueClick(item)">
                     <div style="overflow: hidden;">
-                        <span style="  float: left;width: 60%;text-align: left;"> {{ item.name }}</span>
+                        <span style="  float: left;width: 60%;text-align: left;"> #{{item.id}}  {{ item.name }}</span>
                         <span style="  float: right;width: 40%;text-align: right;"> {{ calcSpentTime(item) }}</span>
                     </div>
                     <br>
@@ -74,6 +81,10 @@ export default defineComponent({
         return {
             loading: false,
             post: null,
+            dateNow: new Date,
+            openPrs: null,
+            inProgressPrs: null,
+            donePrs: null,
             signInRequest: {
                 userName: '',
                 password: ''
@@ -82,12 +93,18 @@ export default defineComponent({
     },
     computed: {
         issuesOpen() {
+            let vm = this;
+            vm.openPrs = store.issues.filter(x => x.statusID == 1).length / store.issues.length * 100;
             return store.issues.filter(x => x.statusID == 1);
         },
         issuesInProgress() {
+            let vm = this;
+            vm.inProgressPrs = store.issues.filter(x => x.statusID == 2).length / store.issues.length * 100;
             return store.issues.filter(x => x.statusID == 2);
         },
         issuesDone() {
+            let vm = this;
+            vm.donePrs = store.issues.filter(x => x.statusID == 3).length / store.issues.length * 100;
             return store.issues.filter(x => x.statusID == 3);
         }
     },
@@ -103,7 +120,6 @@ export default defineComponent({
     methods: {
         //Подсчёт списанного времени
         calcSpentTime(item) {
-            console.log(item);
             let result = 0;
             if (item.taskTimes && item.taskTimes.length>0) {
                 for (let index = 0; index < item.taskTimes.length; index++) {

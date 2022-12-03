@@ -2,6 +2,7 @@
     <div>
         <table class="data-table">
             <tr class="header-table">
+                <td>ID</td>
                 <td>Name task</td>
                 <td>Worker</td>
                 <td>Start date</td>
@@ -10,10 +11,11 @@
                 <td>Description</td>
             </tr>
             <tr v-for="(item, key) in issueList" v-bind:key="key">
+                <td>{{item.id}}</td>
                 <td><a class="link" v-on:click="onIssueClick(item)">{{ item.name }}</a></td>
                 <td><span v-if="item.worker">{{ item.worker.lastName }} {{ item.worker.firstName }}</span></td>
                 <td>{{ formatdate(item.startDate) }}</td>
-                <td>{{ formatdate(item.finishDate) }}</td>
+                <td v-bind:style="formatdate(item.finishDate) <= formatdate(dateNow) ? 'background-color:#ff6b6b' : '' " >{{ formatdate(item.finishDate) }}</td>
                 <td>{{ statuses[item.statusID-1].name }}</td>
                 <td>{{ item.description }}</td>
             </tr>
@@ -32,6 +34,7 @@ export default defineComponent({
         return {
             loading: false,
             post: null,
+            dateNow: new Date,
         };
     },
     computed: {
@@ -70,7 +73,6 @@ export default defineComponent({
     //Метод выполняющейся при загрузке страницы
     mounted: function () {
         let vm = this;
-            console.log(store.statuses);
         vm.loadData();
     }
 });

@@ -236,7 +236,6 @@ export const store = reactive({
                         element.finishDate = new Date(element.finishDate);
                 });
                 str.issues = response;
-                console.log(response);
             });
     },
 
